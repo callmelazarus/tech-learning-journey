@@ -1,18 +1,57 @@
-# This .gitignore is appropriate for repositories deployed to GitHub Pages and using
-# a Gemfile as specified at https://github.com/github/pages-gem#conventional
+# OS-specific
+.DS_Store
+Thumbs.db
 
-# Basic Jekyll gitignores (synchronize to Jekyll.gitignore)
-_site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
+# Node.js / npm / yarn
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Additional Ruby/bundler ignore for when you run: bundle install
-/vendor
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+.eggs/
+*.manifest
+*.spec
 
-# Specific ignore for GitHub Pages
-# GitHub Pages will always use its own deployed version of pages-gem 
-# This means GitHub Pages will NOT use your Gemfile.lock and therefore it is
-# counterproductive to check this file into the repository.
-# Details at https://github.com/github/pages-gem/issues/768
-Gemfile.lock
+# Java / JVM
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.log
+*.out
+*.hprof
+*.idea/
+
+# Build / dist
+dist/
+build/
+out/
+target/
+coverage/
+*.tmp
+*.swp
+
+# Environment / config
+.env
+.env.local
+.env.*.local
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Misc
+*.lock
+*.bak
+*.old

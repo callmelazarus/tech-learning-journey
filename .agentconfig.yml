@@ -1,0 +1,49 @@
+# .agentconfig.yml
+# This file controls how the Study Agent organizes your notes.
+#
+# ✨ What you can do here:
+# - Change the default language for code examples (python, typescript, etc.)
+# - Decide if the agent should auto-commit or push changes to Git
+# - Customize the README template that each topic folder starts with
+# - (Optional) Configure AI model settings if you want notes/code auto-generated
+#
+# 💡 Tip: Update this file instead of editing the Python scripts whenever you
+# want to tweak defaults. It keeps things simple and consistent for everyone
+# using the repo.
+
+
+# Default programming language for example code
+language: "python"
+
+# Number of example files to generate per topic (currently study_agent makes 1)
+example_count: 1
+
+# Git options
+commit: true   # auto-commit after adding topics
+push: false    # set true if you want auto-push after commit
+
+# Topic template (used when filling in README.md)
+topic_template: |
+  # {title}
+
+  **Area:** {area} / **Group:** {group}  
+  **Created:** {date}
+
+  ## Why this matters
+  {why}
+
+  ## Key concepts
+  {concepts}
+
+  ## Pitfalls
+  {pitfalls}
+
+  ## Checklist
+  {checklist}
+
+# Optional LLM configuration (for when you wire up OpenAI or other providers)
+llm:
+  provider: "openai"       # "openai", "anthropic", "ollama", etc.
+  model: "gpt-4o-mini"     # change if you use a different model
+  max_tokens: 1200
+  api_key_env: "OPENAI_API_KEY"  # read from environment variable
