@@ -29,17 +29,20 @@ topic_template: |
   **Area:** {area} / **Group:** {group}  
   **Created:** {date}
 
+  ## Difficulty
+  (easy|medium|hard)
+
   ## Why this matters
-  {why}
+  (short note)
 
   ## Key concepts
-  {concepts}
+  - …
 
   ## Pitfalls
-  {pitfalls}
+  - …
 
-  ## Checklist
-  {checklist}
+  ## Further reading
+  - …
 
 # Optional LLM configuration (for when you wire up OpenAI or other providers)
 llm:
