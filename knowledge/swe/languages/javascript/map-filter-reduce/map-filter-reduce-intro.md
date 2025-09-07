@@ -1,12 +1,13 @@
 # JavaScript `map`, `filter`, and `reduce`: A Practical Overview
 
-JavaScript’s `map`, `filter`, and `reduce` are powerful array methods for transforming, selecting, and aggregating data. Mastering them leads to cleaner, more expressive code.
+JavaScript’s `map`, `filter`, and `reduce` are powerful ARRAY methods for transforming, selecting, and aggregating data. Mastering them leads to cleaner, more expressive code.
 
 ## Key Points
 
 - **`map`** transforms each element in an array and returns a new array.
 - **`filter`** selects elements based on a condition and returns a new array.
 - **`reduce`** accumulates array values into a single result (e.g., sum, object).
+
 - All three methods are non-mutating—they do not change the original array.
 - They are often chained for complex data processing.
 
