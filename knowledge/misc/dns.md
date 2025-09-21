@@ -7,8 +7,19 @@ The Domain Name System (DNS) is a distributed database that translates human-rea
 - **Resolution:** DNS converts domain names to IP addresses.
 - **Hierarchy:** DNS uses a hierarchical structure (root, TLD, authoritative servers).
 - **Caching:** DNS responses are cached to improve speed and reduce load.
-- **Records:** Common DNS records include A, AAAA, MX, CNAME, and TXT.
+- **Records:** Common DNS record types include A, AAAA, MX, CNAME, and TXT.
 - **Redundancy:** Multiple DNS servers ensure reliability and fault tolerance.
+
+## Common DNS Record Types Explained
+
+- **A:** Maps a domain to an IPv4 address.
+- **AAAA:** Maps a domain to an IPv6 address.
+- **MX:** Specifies mail servers for email delivery.
+- **CNAME:** Creates an alias from one domain to another.
+- **TXT:** Stores arbitrary text, often used for verification and security (e.g., SPF, DKIM).
+- **PTR:** Used for reverse DNS lookups (IP to domain).
+- **NS:** Specifies authoritative name servers for the domain.
+- **SOA:** Start of Authority, contains domain administration information.
 
 ## Step-by-Step Explanation & Examples
 
