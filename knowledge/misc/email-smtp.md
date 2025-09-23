@@ -17,7 +17,7 @@ MX (Mail Exchange) records and SMTP (Simple Mail Transfer Protocol) relay rules 
    example.com.   IN   MX   10   mail1.example.com.
    example.com.   IN   MX   20   mail2.example.com.
    ```
-   - `10` and `20` are priorities; lower numbers are preferred.
+   - `10` and `20` are priorities; lower numbers are prioritized/preferred.
 
 2. **SMTP Relay Flow**
    - User sends email via their mail client.
