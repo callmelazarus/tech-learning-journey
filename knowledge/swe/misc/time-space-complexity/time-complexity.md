@@ -6,15 +6,15 @@ Time complexity measures how the runtime of an algorithm grows as the input size
 
 ## Time Complexity Comparison Table
 
-| Complexity | Name           | Example Algorithm      | Growth Rate Description         |
-|------------|---------------|-----------------------|---------------------------------|
-| O(1)       | Constant      | Array access          | No growth with input size       |
-| O(log n)   | Logarithmic   | Binary search         | Grows slowly as input increases |
-| O(n)       | Linear        | Linear search         | Grows directly with input size  |
-| O(n log n) | Linearithmic  | Merge sort, QuickSort | Faster than quadratic, common in sorting |
-| O(n^2)     | Quadratic     | Bubble sort           | Grows rapidly, nested loops     |
-| O(2^n)     | Exponential   | Recursive Fibonacci   | Doubles with each input increase|
-| O(n!)      | Factorial     | Traveling salesman    | Extremely fast growth, impractical |
+| Complexity | Name         | Example Algorithm     | Growth Rate Description                  |
+| ---------- | ------------ | --------------------- | ---------------------------------------- |
+| O(1)       | Constant     | Array access          | No growth with input size                |
+| O(log n)   | Logarithmic  | Binary search         | Grows slowly as input increases          |
+| O(n)       | Linear       | Linear search         | Grows directly with input size           |
+| O(n log n) | Linearithmic | Merge sort, QuickSort | Faster than quadratic, common in sorting |
+| O(n^2)     | Quadratic    | Bubble sort           | Grows rapidly, nested loops              |
+| O(2^n)     | Exponential  | Recursive Fibonacci   | Doubles with each input increase         |
+| O(n!)      | Factorial    | Traveling salesman    | Extremely fast growth, impractical       |
 
 - **Big O Notation:** Standard way to express time complexity (e.g., O(1), O(n), O(log n), O(n^2)).
 - **Growth Rate:** Indicates how quickly runtime increases with input size.
@@ -27,6 +27,7 @@ Time complexity measures how the runtime of an algorithm grows as the input size
 ## Step-by-Step Explanation & Examples
 
 ### 1. Constant Time: O(1)
+
 - **Description:** Runtime does not depend on input size.
 - **Example:**
   ```js
@@ -36,6 +37,7 @@ Time complexity measures how the runtime of an algorithm grows as the input size
   ```
 
 ### 2. Linear Time: O(n)
+
 - **Description:** Runtime grows proportionally with input size.
 - **Example:**
   ```js
@@ -49,11 +51,13 @@ Time complexity measures how the runtime of an algorithm grows as the input size
   ```
 
 ### 3. Logarithmic Time: O(log n)
+
 - **Description:** Runtime grows logarithmically; input is divided in each step.
 - **Example:**
   ```js
   function binarySearch(arr, target) {
-    let left = 0, right = arr.length - 1;
+    let left = 0,
+      right = arr.length - 1;
     while (left <= right) {
       const mid = Math.floor((left + right) / 2);
       if (arr[mid] === target) return mid;
@@ -65,6 +69,7 @@ Time complexity measures how the runtime of an algorithm grows as the input size
   ```
 
 ### 4. Quadratic Time: O(n^2)
+
 - **Description:** Runtime grows with the square of input size; often from nested loops.
 - **Example:**
   ```js
@@ -81,6 +86,7 @@ Time complexity measures how the runtime of an algorithm grows as the input size
   ```
 
 ### 5. Linearithmic Time: O(n log n)
+
 - **Description:** Common in efficient sorting algorithms.
 - **Example:**
   - Merge Sort, QuickSort (average case)
