@@ -18,6 +18,7 @@
 
 ## SWE
 - Backend
+- Data_structures_algos
 - Devops
 - Frontend
 - Languages
