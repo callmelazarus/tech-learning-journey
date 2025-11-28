@@ -1,4 +1,4 @@
-can you write something in a similar and concise format, for the [CONCEPT_ENTER_HERE] 
+can you write something in a similar and concise format, for the [CONCEPT_ENTER_HERE]. I am forming an set of exmaples 
 
 use this as an example:
 
