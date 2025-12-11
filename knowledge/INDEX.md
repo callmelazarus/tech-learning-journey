@@ -8,6 +8,7 @@
 - Nlp-classic
 
 ## MISC
+- Web
 
 ## ML
 - Data-engineering
