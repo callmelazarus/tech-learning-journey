@@ -8,6 +8,7 @@
 - Nlp-classic
 
 ## MISC
+- Vocab
 - Web
 
 ## ML
@@ -21,6 +22,7 @@
 - Backend
 - Business-value
 - Data_structures_algos
+- Design-patterns
 - Devops
 - Frontend
 - Languages
