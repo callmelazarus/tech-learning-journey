@@ -20,6 +20,7 @@
 - Mlops
 
 ## SWE
+- Aws-cloud
 - Backend
 - Business-value
 - Data_structures_algos
