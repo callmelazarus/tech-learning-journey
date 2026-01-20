@@ -1,0 +1,663 @@
+# AWS EventBridge: Complete Overview
+
+AWS EventBridge is a serverless event bus service that routes events between AWS services, custom applications, and SaaS applications. It receives events (JSON objects describing state changes), matches them against rules, and sends them to target services for processing. Think of it as a smart postal service—events are letters, rules are sorting instructions, and targets are destinations that receive and act on the events.
+
+## Key Points
+
+- **Purpose:** Centralized event routing between services and applications
+- **Event Bus:** Channel that receives and routes events
+- **Rules:** Pattern matching to filter and route events to targets
+- **Targets:** AWS services that process matched events (Lambda, SQS, SNS, etc.)
+- **Schema Registry:** Discover, create, and manage event schemas
+
+## Basic Concepts
+
+### Event Structure
+
+```json
+{
+  "version": "0",
+  "id": "6a7e8feb-b491-4cf7-a9f1-bf3703467718",
+  "detail-type": "Order Placed",
+  "source": "myapp.orders",
+  "account": "123456789012",
+  "time": "2024-01-19T10:30:00Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "orderId": "ORD-12345",
+    "userId": "user-789",
+    "amount": 99.99,
+    "items": ["item1", "item2"]
+  }
+}
+```
+
+### Event Bus Types
+
+```
+1. Default Event Bus
+   - Automatically created in every AWS account
+   - Receives events from AWS services
+   - Example: EC2 state changes, S3 uploads
+
+2. Custom Event Bus
+   - Create for your applications
+   - Isolate different workloads
+   - Example: orders-bus, payments-bus
+
+3. Partner Event Bus
+   - Receive events from SaaS providers
+   - Example: Shopify, Datadog, Auth0
+```
+
+## Simple Example: Order Processing
+
+### 1. Put Event (Send to EventBridge)
+
+```javascript
+// Node.js - Send event to EventBridge
+const { EventBridgeClient, PutEventsCommand } = require('@aws-sdk/client-eventbridge');
+
+const client = new EventBridgeClient({ region: 'us-east-1' });
+
+async function sendOrderEvent(order) {
+  const command = new PutEventsCommand({
+    Entries: [
+      {
+        Source: 'myapp.orders',
+        DetailType: 'Order Placed',
+        Detail: JSON.stringify({
+          orderId: order.id,
+          userId: order.userId,
+          amount: order.amount,
+          items: order.items
+        }),
+        EventBusName: 'orders-bus'  // Custom event bus
+      }
+    ]
+  });
+  
+  await client.send(command);
+}
+
+// Usage
+await sendOrderEvent({
+  id: 'ORD-12345',
+  userId: 'user-789',
+  amount: 99.99,
+  items: ['laptop', 'mouse']
+});
+```
+
+### 2. Create Rule (Match and Route)
+
+```json
+// EventBridge Rule - Match orders over $50
+{
+  "source": ["myapp.orders"],
+  "detail-type": ["Order Placed"],
+  "detail": {
+    "amount": [{ "numeric": [">", 50] }]
+  }
+}
+```
+
+```javascript
+// Create rule with AWS SDK
+const { PutRuleCommand, PutTargetsCommand } = require('@aws-sdk/client-eventbridge');
+
+async function createOrderRule() {
+  // Create rule
+  const ruleCommand = new PutRuleCommand({
+    Name: 'high-value-orders',
+    EventBusName: 'orders-bus',
+    EventPattern: JSON.stringify({
+      source: ['myapp.orders'],
+      'detail-type': ['Order Placed'],
+      detail: {
+        amount: [{ numeric: ['>', 50] }]
+      }
+    }),
+    State: 'ENABLED'
+  });
+  
+  await client.send(ruleCommand);
+  
+  // Add Lambda target
+  const targetCommand = new PutTargetsCommand({
+    Rule: 'high-value-orders',
+    EventBusName: 'orders-bus',
+    Targets: [
+      {
+        Id: '1',
+        Arn: 'arn:aws:lambda:us-east-1:123456789012:function:ProcessHighValueOrder'
+      }
+    ]
+  });
+  
+  await client.send(targetCommand);
+}
+```
+
+### 3. Lambda Target (Process Event)
+
+```javascript
+// Lambda function that receives matched events
+exports.handler = async (event) => {
+  console.log('Event received:', JSON.stringify(event, null, 2));
+  
+  const { orderId, userId, amount } = event.detail;
+  
+  // Process high-value order
+  if (amount > 50) {
+    await notifyManager(orderId);
+    await applySpecialHandling(orderId);
+    await sendConfirmationEmail(userId);
+  }
+  
+  return { statusCode: 200, body: 'Processed' };
+};
+```
+
+## Common Patterns
+
+### Fan-Out: One Event, Multiple Targets
+
+```javascript
+// Single event triggers multiple services
+async function setupFanOut() {
+  // Rule matches "Order Placed" events
+  const ruleCommand = new PutRuleCommand({
+    Name: 'order-fanout',
+    EventPattern: JSON.stringify({
+      source: ['myapp.orders'],
+      'detail-type': ['Order Placed']
+    })
+  });
+  
+  await client.send(ruleCommand);
+  
+  // Multiple targets for same rule
+  const targetCommand = new PutTargetsCommand({
+    Rule: 'order-fanout',
+    Targets: [
+      {
+        Id: '1',
+        Arn: 'arn:aws:lambda:us-east-1:123456789012:function:UpdateInventory'
+      },
+      {
+        Id: '2',
+        Arn: 'arn:aws:lambda:us-east-1:123456789012:function:SendConfirmation'
+      },
+      {
+        Id: '3',
+        Arn: 'arn:aws:sqs:us-east-1:123456789012:analytics-queue'
+      },
+      {
+        Id: '4',
+        Arn: 'arn:aws:sns:us-east-1:123456789012:order-notifications'
+      }
+    ]
+  });
+  
+  await client.send(targetCommand);
+}
+
+// Flow:
+// Order Placed event
+//   ├─> Lambda: Update inventory
+//   ├─> Lambda: Send confirmation email
+//   ├─> SQS: Queue for analytics
+//   └─> SNS: Notify subscribers
+```
+
+### Content-Based Routing
+
+```javascript
+// Different rules for different order types
+const rules = [
+  {
+    name: 'digital-orders',
+    pattern: {
+      source: ['myapp.orders'],
+      'detail-type': ['Order Placed'],
+      detail: { orderType: ['digital'] }
+    },
+    target: 'arn:aws:lambda:...:function:ProcessDigitalOrder'
+  },
+  {
+    name: 'physical-orders',
+    pattern: {
+      source: ['myapp.orders'],
+      'detail-type': ['Order Placed'],
+      detail: { orderType: ['physical'] }
+    },
+    target: 'arn:aws:lambda:...:function:ProcessPhysicalOrder'
+  },
+  {
+    name: 'international-orders',
+    pattern: {
+      source: ['myapp.orders'],
+      'detail-type': ['Order Placed'],
+      detail: { 
+        country: [{ 'anything-but': 'US' }]
+      }
+    },
+    target: 'arn:aws:lambda:...:function:ProcessInternationalOrder'
+  }
+];
+```
+
+### Scheduled Events (Cron)
+
+```javascript
+// EventBridge Scheduler (cron expressions)
+const { PutRuleCommand } = require('@aws-sdk/client-eventbridge');
+
+async function createScheduledRule() {
+  const command = new PutRuleCommand({
+    Name: 'daily-report',
+    ScheduleExpression: 'cron(0 9 * * ? *)',  // 9 AM UTC daily
+    State: 'ENABLED'
+  });
+  
+  await client.send(command);
+  
+  // Add Lambda target
+  const targetCommand = new PutTargetsCommand({
+    Rule: 'daily-report',
+    Targets: [{
+      Id: '1',
+      Arn: 'arn:aws:lambda:us-east-1:123456789012:function:GenerateReport'
+    }]
+  });
+  
+  await client.send(targetCommand);
+}
+
+// Cron examples:
+// 'cron(0 9 * * ? *)'        - 9 AM UTC daily
+// 'cron(0 12 * * MON-FRI *)'  - Noon UTC weekdays
+// 'cron(0 0 1 * ? *)'         - Midnight on 1st of month
+// 'rate(5 minutes)'           - Every 5 minutes
+// 'rate(1 hour)'              - Every hour
+```
+
+### Cross-Account Events
+
+```javascript
+// Account A: Send events to Account B
+const command = new PutEventsCommand({
+  Entries: [{
+    Source: 'account-a.app',
+    DetailType: 'Data Updated',
+    Detail: JSON.stringify({ data: 'value' }),
+    EventBusName: 'arn:aws:events:us-east-1:222222222222:event-bus/shared-bus'
+  }]
+});
+
+// Account B: Policy to allow Account A
+const policy = {
+  Version: '2012-10-17',
+  Statement: [{
+    Sid: 'AllowAccountA',
+    Effect: 'Allow',
+    Principal: { AWS: 'arn:aws:iam::111111111111:root' },
+    Action: 'events:PutEvents',
+    Resource: 'arn:aws:events:us-east-1:222222222222:event-bus/shared-bus'
+  }]
+};
+```
+
+## Event Pattern Matching
+
+### Basic Patterns
+
+```json
+// Exact match
+{
+  "source": ["myapp.orders"],
+  "detail-type": ["Order Placed"]
+}
+
+// Multiple values (OR)
+{
+  "detail-type": ["Order Placed", "Order Cancelled"]
+}
+
+// Prefix match
+{
+  "source": [{ "prefix": "myapp." }]
+}
+
+// Anything but
+{
+  "detail": {
+    "status": [{ "anything-but": "cancelled" }]
+  }
+}
+
+// Numeric comparison
+{
+  "detail": {
+    "amount": [{ "numeric": [">", 100] }],
+    "quantity": [{ "numeric": [">=", 1, "<=", 10] }]
+  }
+}
+
+// Exists check
+{
+  "detail": {
+    "couponCode": [{ "exists": true }]
+  }
+}
+```
+
+### Complex Patterns
+
+```json
+// Combine multiple conditions
+{
+  "source": ["myapp.orders"],
+  "detail-type": ["Order Placed"],
+  "detail": {
+    "amount": [{ "numeric": [">", 50] }],
+    "country": [{ "anything-but": "US" }],
+    "isPriority": [true]
+  }
+}
+
+// Array matching
+{
+  "detail": {
+    "items": [{ "prefix": "electronics-" }]
+  }
+}
+```
+
+## Common Targets
+
+### Lambda Function
+
+```javascript
+{
+  Id: '1',
+  Arn: 'arn:aws:lambda:us-east-1:123456789012:function:ProcessEvent',
+  RetryPolicy: {
+    MaximumRetryAttempts: 2,
+    MaximumEventAge: 3600  // 1 hour
+  },
+  DeadLetterConfig: {
+    Arn: 'arn:aws:sqs:us-east-1:123456789012:failed-events'
+  }
+}
+```
+
+### SQS Queue
+
+```javascript
+{
+  Id: '1',
+  Arn: 'arn:aws:sqs:us-east-1:123456789012:event-queue',
+  MessageGroupId: 'order-events',  // For FIFO queues
+  SqsParameters: {
+    MessageGroupId: '$.detail.orderId'  // Dynamic from event
+  }
+}
+```
+
+### Step Functions
+
+```javascript
+{
+  Id: '1',
+  Arn: 'arn:aws:states:us-east-1:123456789012:stateMachine:OrderWorkflow',
+  RoleArn: 'arn:aws:iam::123456789012:role/EventBridgeStepFunctionsRole',
+  Input: '{"orderId": "$.detail.orderId"}',  // Transform event
+  RetryPolicy: {
+    MaximumRetryAttempts: 3
+  }
+}
+```
+
+### SNS Topic
+
+```javascript
+{
+  Id: '1',
+  Arn: 'arn:aws:sns:us-east-1:123456789012:event-notifications',
+  MessageGroupId: 'events'
+}
+```
+
+## Input Transformation
+
+```javascript
+// Transform event before sending to target
+{
+  Id: '1',
+  Arn: 'arn:aws:lambda:us-east-1:123456789012:function:Process',
+  InputTransformer: {
+    InputPathsMap: {
+      'orderId': '$.detail.orderId',
+      'amount': '$.detail.amount',
+      'time': '$.time'
+    },
+    InputTemplate: JSON.stringify({
+      order: {
+        id: '<orderId>',
+        total: '<amount>',
+        timestamp: '<time>'
+      },
+      message: 'Processing order <orderId> for $<amount>'
+    })
+  }
+}
+
+// Original event:
+{
+  "detail": {
+    "orderId": "ORD-123",
+    "amount": 99.99,
+    "userId": "user-456"
+  },
+  "time": "2024-01-19T10:30:00Z"
+}
+
+// Transformed input to Lambda:
+{
+  "order": {
+    "id": "ORD-123",
+    "total": "99.99",
+    "timestamp": "2024-01-19T10:30:00Z"
+  },
+  "message": "Processing order ORD-123 for $99.99"
+}
+```
+
+## Real-World Example: E-commerce
+
+```javascript
+// Order service publishes event
+async function placeOrder(order) {
+  // Save order to database
+  await db.orders.create(order);
+  
+  // Publish event to EventBridge
+  await eventBridge.send(new PutEventsCommand({
+    Entries: [{
+      Source: 'ecommerce.orders',
+      DetailType: 'Order Placed',
+      Detail: JSON.stringify({
+        orderId: order.id,
+        userId: order.userId,
+        amount: order.total,
+        items: order.items,
+        shippingAddress: order.address
+      })
+    }]
+  }));
+}
+
+// EventBridge routes to multiple targets:
+
+// Rule 1: Inventory service (Lambda)
+{
+  pattern: { source: ['ecommerce.orders'], 'detail-type': ['Order Placed'] },
+  target: 'UpdateInventoryFunction'
+}
+
+// Rule 2: Email service (Lambda)
+{
+  pattern: { source: ['ecommerce.orders'], 'detail-type': ['Order Placed'] },
+  target: 'SendConfirmationEmailFunction'
+}
+
+// Rule 3: Analytics (SQS)
+{
+  pattern: { source: ['ecommerce.orders'], 'detail-type': ['Order Placed'] },
+  target: 'AnalyticsQueue'
+}
+
+// Rule 4: High-value orders (SNS)
+{
+  pattern: {
+    source: ['ecommerce.orders'],
+    'detail-type': ['Order Placed'],
+    detail: { amount: [{ numeric: ['>', 500] }] }
+  },
+  target: 'HighValueOrderTopic'
+}
+```
+
+## EventBridge vs SNS vs SQS
+
+```
+EventBridge:
+✅ Complex routing rules (pattern matching)
+✅ Multiple targets per event
+✅ Built-in AWS service integration
+✅ Schema registry
+❌ Higher latency (~500ms)
+Use: Event-driven architectures, microservices
+
+SNS (Simple Notification Service):
+✅ Simple pub/sub
+✅ Lower latency
+✅ Message filtering
+❌ No complex routing
+Use: Fan-out notifications, alerts
+
+SQS (Simple Queue Service):
+✅ Message queuing
+✅ Guaranteed delivery
+✅ Dead letter queues
+❌ No pub/sub
+Use: Decoupling services, buffering
+```
+
+## Common Pitfalls
+
+```javascript
+// ❌ Forgetting to JSON.stringify Detail
+await eventBridge.send(new PutEventsCommand({
+  Entries: [{
+    Detail: { orderId: '123' }  // Wrong - must be string
+  }]
+}));
+
+// ✅ Correct
+Detail: JSON.stringify({ orderId: '123' })
+
+
+// ❌ Too broad event pattern (matches everything)
+{
+  "source": ["myapp"]  // Matches all myapp.* events
+}
+
+// ✅ Specific pattern
+{
+  "source": ["myapp.orders"],
+  "detail-type": ["Order Placed"]
+}
+
+
+// ❌ Not handling Lambda target errors
+{
+  Id: '1',
+  Arn: 'arn:aws:lambda:...:function:Process'
+  // No retry or DLQ configured
+}
+
+// ✅ Configure retry and DLQ
+{
+  Id: '1',
+  Arn: 'arn:aws:lambda:...:function:Process',
+  RetryPolicy: { MaximumRetryAttempts: 2 },
+  DeadLetterConfig: { Arn: 'arn:aws:sqs:...:dlq' }
+}
+```
+
+## Terraform Example
+
+```hcl
+# Event Bus
+resource "aws_cloudwatch_event_bus" "orders" {
+  name = "orders-bus"
+}
+
+# Rule
+resource "aws_cloudwatch_event_rule" "high_value_orders" {
+  name           = "high-value-orders"
+  event_bus_name = aws_cloudwatch_event_bus.orders.name
+  
+  event_pattern = jsonencode({
+    source      = ["myapp.orders"]
+    detail-type = ["Order Placed"]
+    detail = {
+      amount = [{ numeric = [">", 50] }]
+    }
+  })
+}
+
+# Target
+resource "aws_cloudwatch_event_target" "lambda" {
+  rule           = aws_cloudwatch_event_rule.high_value_orders.name
+  event_bus_name = aws_cloudwatch_event_bus.orders.name
+  arn            = aws_lambda_function.process.arn
+  
+  retry_policy {
+    maximum_retry_attempts = 2
+    maximum_event_age      = 3600
+  }
+  
+  dead_letter_config {
+    arn = aws_sqs_queue.dlq.arn
+  }
+}
+```
+
+## References
+
+- [AWS EventBridge Documentation](https://docs.aws.amazon.com/eventbridge/)
+- [Event Pattern Reference](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-patterns.html)
+- [EventBridge Pricing](https://aws.amazon.com/eventbridge/pricing/)
+
+---
+
+## Summary
+
+**EventBridge:** Serverless event router connecting AWS services and applications.
+
+**Flow:** Event → Event Bus → Rule (pattern match) → Target (Lambda, SQS, etc.)
+
+**Key Features:**
+- Pattern matching for smart routing
+- Multiple targets per event
+- Built-in retry and DLQ support
+- Schema registry for discovery
+
+**Use when:** Building event-driven architectures, decoupling microservices, reacting to AWS service events.
+
+**Cost:** $1 per million custom events (AWS service events are free).
