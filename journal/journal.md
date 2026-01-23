@@ -1,5 +1,7 @@
 # 2025, 2026 Journal
 
+## 2026-1-22
+- magic strings, constants, enums
 
 ## 2026-1-21
 - sql like 
