@@ -1,5 +1,9 @@
 # 2025, 2026 Journal
 
+## 2026-1-24
+- Select component
+- aws codebuild
+
 ## 2026-1-22
 - magic strings, constants, enums
 
