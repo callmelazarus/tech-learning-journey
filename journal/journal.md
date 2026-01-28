@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-1-27
+- barrel files
+
 ## 2026-1-24
 - Select component
 - aws codebuild
