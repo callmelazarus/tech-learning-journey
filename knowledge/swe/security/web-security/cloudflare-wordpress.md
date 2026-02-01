@@ -45,3 +45,50 @@
 **Old:** Visitor → Squarespace DNS → InMotion nameservers → InMotion server → Site
 
 **New:** Visitor → Squarespace DNS → Cloudflare nameservers → Cloudflare CDN (cache/security) → InMotion server → Site
+
+---
+
+Question: How can cloudflare get in front of this traffic? is it because squarespace nameservers are now pointing to cloudeflare?
+
+
+
+# Exactly Right!
+
+**Yes - it's all because of the nameserver change.**
+
+---
+
+# How It Works:
+
+1. **Visitor types `sola.network` in browser**
+
+2. **Browser asks:** "Where is sola.network?"
+
+3. **Squarespace (registrar) says:** "Ask Cloudflare's nameservers" ← *This is the key*
+
+4. **Cloudflare's nameservers respond:** "sola.network is at this IP... but route through us first"
+
+5. **Traffic flows through Cloudflare**, then to InMotion
+
+---
+
+# The Critical Piece:
+
+**Nameservers control who answers DNS queries.**
+
+- When nameservers were InMotion's → InMotion gave the IP, traffic went direct
+- Now nameservers are Cloudflare's → Cloudflare gives *their* IP for proxied records, intercepts traffic
+
+**For proxied (orange) records:** Cloudflare returns *Cloudflare's IP*, not InMotion's IP directly
+
+**For DNS only (gray) records:** Cloudflare returns InMotion's actual IP, traffic goes direct
+
+---
+
+# Analogy:
+
+**Squarespace = Property deed** (proves you own the domain)
+
+**Nameservers = GPS coordinator** (decides what address to give when someone asks for directions)
+
+You just changed the GPS coordinator from InMotion to Cloudflare.
