@@ -1,5 +1,9 @@
 # 2025, 2026 Journal
 
+## 2026-1-31
+- dns records
+- cloudflare
+
 ## 2026-1-27
 - barrel files
 
