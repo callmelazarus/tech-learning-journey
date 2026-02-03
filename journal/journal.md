@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-2-2
+- npm dependency trees
+
 ## 2026-1-31
 - dns records
 - cloudflare
