@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-2-6
+- type casting
+
 ## 2026-2-5
 - type predciates
 
