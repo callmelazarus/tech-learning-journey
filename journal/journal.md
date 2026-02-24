@@ -1,8 +1,10 @@
 # 2025, 2026 Journal
 
+## 2026-02-23
+- aws lambda file structure
+
 ## 2026-2-20
 - logical fallacies
-- 
 
 ## 2026-2-19
 - dos, ddos
