@@ -2,6 +2,7 @@
 
 ## 2026-02-23
 - aws lambda file structure
+- aws cloudtrail
 
 ## 2026-2-20
 - logical fallacies
