@@ -1,8 +1,10 @@
 # 2025, 2026 Journal
 
+## 2026-02-25
+- git reflog
+
 ## 2026-02-24
 - cursor skills
-- 
 
 ## 2026-02-23
 - aws lambda file structure
