@@ -41,6 +41,10 @@ cd frontend && python3 -m http.server 8080
 # Node (if you have npx)
 cd frontend && npx serve .
 # then visit the URL printed in the terminal
+# npx downloads and runs the 'serve' package without installing it globally.
+# 'serve .' starts a local HTTP server in the current directory,
+# so the browser fetches files over http:// instead of file://.
+# This avoids browser security restrictions that can block local file access.
 ```
 
 ---
