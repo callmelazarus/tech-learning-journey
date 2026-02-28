@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tech-learning-journey</title>
+
+  <!-- Monospace font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Syntax highlighting theme -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Header ─────────────────────────────────────────── -->
+    <header class="header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+          <span></span><span></span><span></span>
+        </button>
+        <a href="#" class="logo" id="homeLink">
+          <span class="logo-tilde">~/</span><span class="logo-name">tech-learning-journey</span>
+        </a>
+      </div>
+
+      <div class="header-center">
+        <div class="search-box" id="searchBox">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="search topics..."
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Search topics"
+          />
+          <kbd class="search-hint">ctrl+k</kbd>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <span class="topic-count" id="topicCount"></span>
+      </div>
+    </header>
+
+    <!-- ── Body ───────────────────────────────────────────── -->
+    <div class="body-layout">
+
+      <!-- Sidebar -->
+      <nav class="sidebar" id="sidebar" aria-label="Knowledge navigation">
+        <div class="sidebar-inner" id="sidebarInner">
+          <!-- populated by app.js -->
+        </div>
+      </nav>
+
+      <!-- Main content -->
+      <main class="main" id="main">
+
+        <!-- HOME VIEW -->
+        <section class="view" id="homeView">
+          <div class="hero">
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+                <span class="terminal-label">bash — tech-learning-journey</span>
+              </div>
+              <div class="terminal-body" id="terminalBody">
+                <!-- populated by app.js -->
+              </div>
+            </div>
+          </div>
+
+          <div class="home-cards" id="homeCards">
+            <!-- populated by app.js -->
+          </div>
+        </section>
+
+        <!-- ARTICLE VIEW -->
+        <section class="view hidden" id="articleView">
+          <nav class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb"></nav>
+          <article class="article" id="articleContent"></article>
+        </section>
+
+        <!-- SEARCH VIEW -->
+        <section class="view hidden" id="searchView">
+          <p class="search-meta" id="searchMeta"></p>
+          <div id="searchResults"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- CDN libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- Generated data & app -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
