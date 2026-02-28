@@ -10,14 +10,14 @@ The frontend is a zero-dependency static site. There are two steps: generate the
 
 ### 1. Generate the data file
 
-The site reads all `.md` files from `knowledge/` and bundles them into a single `frontend/data.js` file.
+`generate_data.py` scans all `.md` files under `knowledge/`, extracts each file's title (from the first `# Heading`) and full content, then bundles everything into `frontend/data.js` as a single `LEARNINGS` JavaScript global. That global contains two things: a nested navigation tree (used to build the sidebar) and a flat list of articles (used for search and rendering). The file is checked into the repo but should never be edited by hand — any changes get overwritten the next time the script runs.
 
 ```bash
 cd frontend
 python3 generate_data.py
 ```
 
-This writes `frontend/data.js`. Re-run it any time you add or update a knowledge file.
+Re-run it any time you add or update a knowledge file.
 
 > **Requires:** Python 3.7+
 
