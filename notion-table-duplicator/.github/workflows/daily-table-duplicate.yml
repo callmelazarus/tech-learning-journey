@@ -1,0 +1,35 @@
+name: Daily Notion Table Duplication
+
+on:
+  schedule:
+    # 4:00 AM PST (UTC-8) = 12:00 PM UTC
+    # Note: During PDT (summer, UTC-7) this fires at 5:00 AM local time.
+    - cron: '0 12 * * *'
+
+  # Allow manual runs from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  duplicate-table:
+    name: Duplicate top-most Notion table
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run table duplication script
+        run: python scripts/duplicate_table.py
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
