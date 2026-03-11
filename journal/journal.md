@@ -1,6 +1,10 @@
 # 2025, 2026 Journal
 
+## 2026-03-10
+- regression testing
+
 ## 2026-03-09
+- wiz
 
 ## 2026-03-04
 - Splunk spl
