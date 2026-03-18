@@ -1,5 +1,11 @@
 # 2025, 2026 Journal
 
+## 2026-03-17
+- ls command
+
+## 2026-03-13
+- primatives
+
 ## 2026-03-10
 - regression testing
 
