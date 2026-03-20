@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-03-19
+- JS build process
+
 ## 2026-03-17
 - ls command
 
