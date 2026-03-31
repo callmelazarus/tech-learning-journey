@@ -1,5 +1,11 @@
 # 2025, 2026 Journal
 
+## 2026-03-30
+- on conflict do nothing
+
+## 2026-03-28
+- git reflog
+
 ## 2026-03-25
 - satisfies keyword
 
