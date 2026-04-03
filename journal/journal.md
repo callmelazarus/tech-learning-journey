@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-04-03
+- GUID
+
 ## 2026-03-30
 - on conflict do nothing
 - webhook
