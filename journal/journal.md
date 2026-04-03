@@ -2,6 +2,7 @@
 
 ## 2026-04-03
 - GUID
+- bits
 
 ## 2026-03-30
 - on conflict do nothing
