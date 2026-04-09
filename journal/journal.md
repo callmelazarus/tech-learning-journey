@@ -1,5 +1,43 @@
 # 2025, 2026 Journal
 
+## 2026-04-06
+- utf-8
+
+## 2026-04-03
+- GUID
+- bits
+
+## 2026-03-30
+- on conflict do nothing
+- webhook
+
+## 2026-03-28
+- git reflog
+
+## 2026-03-25
+- satisfies keyword
+
+## 2026-03-19
+- JS build process
+
+## 2026-03-17
+- ls command
+
+## 2026-03-13
+- primatives
+
+## 2026-03-10
+- regression testing
+
+## 2026-03-09
+- wiz
+
+## 2026-03-04
+- Splunk spl
+
+## 2026-03-03
+- parsing
+
 ## 2026-02-27
 - npx
 
