@@ -1,7 +1,10 @@
 # 2025, 2026 Journal
 
+## 2026-04-14
+- package.json, override, dependencies
+
 ## 2026-04-11
-- any vs unknown
+- any vs unknown, typing
 
 ## 2026-04-06
 - utf-8
