@@ -2,6 +2,7 @@
 
 ## 2026-04-17
 - trim js
+- git tracking 
 
 ## 2026-04-14
 - package.json, override, dependencies
