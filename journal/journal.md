@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-04-17
+- trim js
+
 ## 2026-04-14
 - package.json, override, dependencies
 
