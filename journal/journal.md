@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-04-22
+- JSON revivers and JSON replacers 
+
 ## 2026-04-21
 - cdk aws file
 
