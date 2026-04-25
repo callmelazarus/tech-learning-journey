@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-04-25
+- [OWASP Top 10 ](https://owasp.org/Top10/2025/0x00_2025-Introduction/)
+
 ## 2026-04-22
 - JSON revivers and JSON replacers 
 
