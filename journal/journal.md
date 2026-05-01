@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-04-30
+- hot reloading
+
 ## 2026-04-28
 - double bang JS
 
