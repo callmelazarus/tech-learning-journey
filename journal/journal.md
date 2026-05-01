@@ -2,6 +2,7 @@
 
 ## 2026-04-30
 - hot reloading
+- webpack
 
 ## 2026-04-28
 - double bang JS
