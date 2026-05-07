@@ -23,6 +23,7 @@
 - Aws-cloud
 - Backend
 - Business-value
+- Cli
 - Data_structures_algos
 - Design-patterns
 - Devops
