@@ -2,6 +2,7 @@
 
 ## 2026-05-06
 - 4 types of DB
+- grep vs find
 
 ## 2026-05-02
 - openfga intro
