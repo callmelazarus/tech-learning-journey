@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-05-12
+- http status codes
+
 ## 2026-05-06
 - 4 types of DB
 - grep vs find
