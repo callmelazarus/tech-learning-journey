@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-05-20
+- session authentication
+
 ## 2026-05-19
 - common git commands
 
