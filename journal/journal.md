@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-05-21
+- jwt secret and public keys
+
 ## 2026-05-20
 - session authentication
 
