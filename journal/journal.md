@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-05-22
+- n+1 query problem
+
 ## 2026-05-21
 - jwt secret and public keys
 
