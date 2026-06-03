@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-06-02
+- aws paramter store
+
 ## 2026-05-22
 - n+1 query problem
 
