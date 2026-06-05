@@ -1,5 +1,8 @@
 # 2025, 2026 Journal
 
+## 2026-06-04
+- Observability
+
 ## 2026-06-02
 - aws paramter store
 
