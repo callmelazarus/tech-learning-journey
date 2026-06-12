@@ -2,6 +2,7 @@
 
 ## AI
 - Agents
+- Ai-development
 - Applications
 - Llms
 - Misc
